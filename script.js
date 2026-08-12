@@ -76,7 +76,6 @@ const getWeatherData = async (location) => {
         },
       ],
     };
-    return weatherData;
     return processedWeatherData;
   } catch (error) {
     console.log(error);
