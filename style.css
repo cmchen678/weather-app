@@ -1,0 +1,11 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.days-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  text-align: center;
+}

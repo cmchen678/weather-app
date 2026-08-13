@@ -8,6 +8,8 @@ searchForm.addEventListener("submit", (event) => {
   const location = formData.get("location-search");
 
   getWeatherData(location).then((data) => displayWeatherData(data));
+
+  searchForm.reset();
 });
 
 const getWeatherData = async (location) => {
@@ -21,7 +23,6 @@ const getWeatherData = async (location) => {
     }
 
     const weatherData = await response.json();
-    const currentHour = new Date().getHours();
     console.log(weatherData);
 
     const processedWeatherData = await {
@@ -33,40 +34,6 @@ const getWeatherData = async (location) => {
       wind: weatherData.currentConditions.windspeed,
       condition: weatherData.currentConditions.conditions,
       icon: weatherData.currentConditions.icon,
-      hours: [
-        {
-          icon: weatherData.days[0].hours[currentHour + 1].icon,
-          temp: weatherData.days[0].hours[currentHour + 1].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 2].icon,
-          temp: weatherData.days[0].hours[currentHour + 2].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 3].icon,
-          temp: weatherData.days[0].hours[currentHour + 3].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 4].icon,
-          temp: weatherData.days[0].hours[currentHour + 4].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 5].icon,
-          temp: weatherData.days[0].hours[currentHour + 5].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 6].icon,
-          temp: weatherData.days[0].hours[currentHour + 6].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 7].icon,
-          temp: weatherData.days[0].hours[currentHour + 7].temp,
-        },
-        {
-          icon: weatherData.days[0].hours[currentHour + 8].icon,
-          temp: weatherData.days[0].hours[currentHour + 8].temp,
-        },
-      ],
       days: [
         {
           date: weatherData.days[1].datetime,
@@ -122,6 +89,12 @@ const displayWeatherData = (data) => {
   const container = document.querySelector(".container");
   container.innerHTML = "";
 
+  displayCurrentWeather(data);
+  displayWeeklyWeather(data);
+};
+
+const displayCurrentWeather = (data) => {
+  const container = document.querySelector(".container");
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
 
@@ -175,4 +148,45 @@ const displayWeatherData = (data) => {
     miscInfoContainer,
   );
   container.append(currentWeatherContainer);
+};
+
+const displayWeeklyWeather = (data) => {
+  const container = document.querySelector(".container");
+  const weeklyWeatherContainer = document.createElement("div");
+  weeklyWeatherContainer.classList.add("weekly-weather-container");
+  const daysList = document.createElement("ul");
+  daysList.classList.add("days-list");
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const today = new Date().getDay();
+  console.log(days[today]);
+
+  for (let i = 1; i <= 7; i++) {
+    const day = document.createElement("li");
+    day.classList.add("day");
+
+    const dayName = document.createElement("p");
+    dayName.classList.add("day-name");
+    dayName.textContent = days[(today + i) % 7];
+
+    const temp = document.createElement("p");
+    temp.textContent = `${Math.round(data.days[i - 1].temp)}°`;
+
+    const condition = document.createElement("p");
+    condition.textContent = data.days[i - 1].condition;
+
+    day.append(dayName, temp, condition);
+    daysList.append(day);
+  }
+
+  weeklyWeatherContainer.append(daysList);
+  container.append(weeklyWeatherContainer);
 };
