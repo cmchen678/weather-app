@@ -114,8 +114,8 @@ const displayCurrentWeather = (data) => {
   location.classList.add("location");
   location.textContent = data.location;
 
-  const miscInfoContainer = document.createElement("ul");
-  miscInfoContainer.classList.add("misc-info-container");
+  const miscInfoList = document.createElement("ul");
+  miscInfoList.classList.add("misc-info-list");
 
   const precip = document.createElement("li");
   const precipLabel = document.createElement("p");
@@ -138,14 +138,14 @@ const displayCurrentWeather = (data) => {
   windSpeed.textContent = `${data.wind} mph`;
   wind.append(windLabel, windSpeed);
 
-  miscInfoContainer.append(precip, humidity, wind);
+  miscInfoList.append(precip, humidity, wind);
 
   currentWeatherContainer.append(
     description,
     temp,
     condition,
     location,
-    miscInfoContainer,
+    miscInfoList,
   );
   container.append(currentWeatherContainer);
 };

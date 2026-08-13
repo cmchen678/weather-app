@@ -1,11 +1,43 @@
+html {
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  height: 95%;
+  aspect-ratio: 1.5 / 1;
+  border: 1px solid gold;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  padding: 20px 0 20px 50px;
+}
+
+.search-form {
+  justify-self: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 75% 1fr;
+}
+
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+.misc-info-list {
+  display: flex;
+  gap: 20px;
+}
+
 .days-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-rows: repeat(auto-fit, 1fr);
+  gap: 20px;
   text-align: center;
 }
