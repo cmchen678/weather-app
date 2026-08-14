@@ -86,15 +86,15 @@ const getWeatherData = async (location) => {
 };
 
 const displayWeatherData = (data) => {
-  const container = document.querySelector(".container");
-  container.innerHTML = "";
+  const content = document.querySelector(".content");
+  content.innerHTML = "";
 
   displayCurrentWeather(data);
   displayWeeklyWeather(data);
 };
 
 const displayCurrentWeather = (data) => {
-  const container = document.querySelector(".container");
+  const content = document.querySelector(".content");
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
 
@@ -147,11 +147,11 @@ const displayCurrentWeather = (data) => {
     location,
     miscInfoList,
   );
-  container.append(currentWeatherContainer);
+  content.append(currentWeatherContainer);
 };
 
 const displayWeeklyWeather = (data) => {
-  const container = document.querySelector(".container");
+  const content = document.querySelector(".content");
   const weeklyWeatherContainer = document.createElement("div");
   weeklyWeatherContainer.classList.add("weekly-weather-container");
   const daysList = document.createElement("ul");
@@ -177,16 +177,16 @@ const displayWeeklyWeather = (data) => {
     dayName.classList.add("day-name");
     dayName.textContent = days[(today + i) % 7];
 
-    const temp = document.createElement("p");
-    temp.textContent = `${Math.round(data.days[i - 1].temp)}°`;
-
     const condition = document.createElement("p");
     condition.textContent = data.days[i - 1].condition;
+
+    const temp = document.createElement("p");
+    temp.textContent = `${Math.round(data.days[i - 1].temp)}°`;
 
     day.append(dayName, temp, condition);
     daysList.append(day);
   }
 
   weeklyWeatherContainer.append(daysList);
-  container.append(weeklyWeatherContainer);
+  content.append(weeklyWeatherContainer);
 };
