@@ -27,7 +27,6 @@ const getWeatherData = async (location) => {
 
     const processedWeatherData = await {
       location: weatherData.resolvedAddress,
-      description: weatherData.description,
       temp: weatherData.currentConditions.temp,
       humidity: weatherData.currentConditions.humidity,
       precipprob: weatherData.currentConditions.precipprob,
@@ -98,10 +97,6 @@ const displayCurrentWeather = (data) => {
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
 
-  const description = document.createElement("p");
-  description.classList.add("description");
-  description.textContent = data.description;
-
   const temp = document.createElement("p");
   temp.classList.add("current-temp");
   temp.textContent = `${Math.round(data.temp)}°F`;
@@ -140,13 +135,7 @@ const displayCurrentWeather = (data) => {
 
   miscInfoList.append(precip, humidity, wind);
 
-  currentWeatherContainer.append(
-    location,
-    temp,
-    condition,
-    miscInfoList,
-    description,
-  );
+  currentWeatherContainer.append(location, temp, condition, miscInfoList);
   content.append(currentWeatherContainer);
 };
 
@@ -167,30 +156,34 @@ const displayWeeklyWeather = (data) => {
     "Saturday",
   ];
   const today = new Date().getDay();
-  console.log(days[today]);
 
   for (let i = 1; i <= 7; i++) {
     const day = document.createElement("li");
     day.classList.add("day");
 
-    const dayNameAndConditionBox = document.createElement('div');
+    const iconID = data.days[i - 1].icon;
+    const iconUrl = `./icons/${iconID}.svg`;
+    const icon = document.createElement("img");
+    icon.src = iconUrl;
+    icon.alt = data.days[i - 1].condition;
+
+    const dayNameAndConditionBox = document.createElement("div");
 
     const dayName = document.createElement("p");
     dayName.classList.add("day-name");
     dayName.textContent = days[(today + i) % 7];
 
-
     const condition = document.createElement("p");
     condition.textContent = data.days[i - 1].condition;
-    condition.style.fontSize = "14px";
+    condition.style.fontSize = "16px";
     condition.style.color = "gray";
 
     dayNameAndConditionBox.append(dayName, condition);
 
     const temp = document.createElement("p");
-    temp.textContent = `${Math.round(data.days[i - 1].temp)}°`;
+    temp.textContent = `${Math.round(data.days[i - 1].temp)}°F`;
 
-    day.append(dayNameAndConditionBox, temp);
+    day.append(icon, dayNameAndConditionBox, temp);
     daysList.append(day);
   }
 
