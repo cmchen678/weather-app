@@ -43,6 +43,7 @@ body {
 .current-temp {
   font-size: 64px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .misc-info-list {

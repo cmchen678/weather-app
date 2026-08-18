@@ -100,6 +100,13 @@ const displayCurrentWeather = (data) => {
   const temp = document.createElement("p");
   temp.classList.add("current-temp");
   temp.textContent = `${Math.round(data.temp)}°F`;
+  temp.addEventListener("click", () => {
+    if (temp.textContent.includes("F")) {
+      temp.textContent = `${Math.round((data.temp - 32) * (5 / 9))}°C`;
+    } else if (temp.textContent.includes("C")) {
+      temp.textContent = `${Math.round(data.temp)}°F`;
+    }
+  });
 
   const condition = document.createElement("p");
   condition.classList.add("current-condition");
