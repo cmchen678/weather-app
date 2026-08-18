@@ -18,7 +18,7 @@ body {
 
 .container {
   height: 90vh;
-  width: 75%;
+  width: 80%;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 100px;
@@ -32,8 +32,11 @@ body {
   grid-template-columns: 80% 1fr;
 }
 
-.description {
-  font-size: 32px;
+.current-weather-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 24px;
 }
 
 .current-temp {
@@ -43,16 +46,21 @@ body {
 
 .misc-info-list {
   display: flex;
-  gap: 20px;
+  gap: 50px;
 }
 
 .days-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  text-align: center;
   border: 1px solid gray;
   border-radius: 24px;
   background-color: #1a1a1a;
   padding: 20px;
+  font-size: 16px;
+}
+
+.day {
+  display: flex;
+  justify-content: space-between;
 }

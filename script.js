@@ -104,7 +104,7 @@ const displayCurrentWeather = (data) => {
 
   const temp = document.createElement("p");
   temp.classList.add("current-temp");
-  temp.textContent = `${Math.round(data.temp)}°`;
+  temp.textContent = `${Math.round(data.temp)}°F`;
 
   const condition = document.createElement("p");
   condition.classList.add("current-condition");
@@ -141,11 +141,11 @@ const displayCurrentWeather = (data) => {
   miscInfoList.append(precip, humidity, wind);
 
   currentWeatherContainer.append(
-    description,
+    location,
     temp,
     condition,
-    location,
     miscInfoList,
+    description,
   );
   content.append(currentWeatherContainer);
 };
@@ -173,17 +173,24 @@ const displayWeeklyWeather = (data) => {
     const day = document.createElement("li");
     day.classList.add("day");
 
+    const dayNameAndConditionBox = document.createElement('div');
+
     const dayName = document.createElement("p");
     dayName.classList.add("day-name");
     dayName.textContent = days[(today + i) % 7];
 
+
     const condition = document.createElement("p");
     condition.textContent = data.days[i - 1].condition;
+    condition.style.fontSize = "14px";
+    condition.style.color = "gray";
+
+    dayNameAndConditionBox.append(dayName, condition);
 
     const temp = document.createElement("p");
     temp.textContent = `${Math.round(data.days[i - 1].temp)}°`;
 
-    day.append(dayName, temp, condition);
+    day.append(dayNameAndConditionBox, temp);
     daysList.append(day);
   }
 
