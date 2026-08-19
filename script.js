@@ -1,21 +1,24 @@
 "use strict";
 
+let currentLocation;
+let unitGroup = "us";
+
 const searchForm = document.querySelector(".search-form");
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const formData = new FormData(event.target);
-  const location = formData.get("location-search");
+  currentLocation = formData.get("location-search");
 
-  getWeatherData(location).then((data) => displayWeatherData(data));
+  getWeatherData().then((data) => displayWeatherData(data));
 
   searchForm.reset();
 });
 
-const getWeatherData = async (location) => {
+const getWeatherData = async () => {
   try {
     const response = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=GSF8BJNKB4TS3XL6TGZP3BAF7`,
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${currentLocation}?unitGroup=${unitGroup}&key=GSF8BJNKB4TS3XL6TGZP3BAF7`,
     );
 
     if (!response.ok) {
@@ -97,16 +100,35 @@ const displayCurrentWeather = (data) => {
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
 
+  const tempContainer = document.createElement("div");
+  tempContainer.classList.add("current-temp");
   const temp = document.createElement("p");
-  temp.classList.add("current-temp");
-  temp.textContent = `${Math.round(data.temp)}°F`;
-  temp.addEventListener("click", () => {
-    if (temp.textContent.includes("F")) {
-      temp.textContent = `${Math.round((data.temp - 32) * (5 / 9))}°C`;
-    } else if (temp.textContent.includes("C")) {
-      temp.textContent = `${Math.round(data.temp)}°F`;
-    }
-  });
+  temp.textContent = Math.round(data.temp);
+  temp.style.fontSize = "64px";
+  const fahrenheit = document.createElement("span");
+  fahrenheit.classList.add("fahrenheit");
+  fahrenheit.textContent = "°F |";
+  const celsius = document.createElement("span");
+  celsius.classList.add("celsius");
+  celsius.textContent = "°C";
+
+  if (unitGroup === "us") {
+    fahrenheit.classList.remove("unactive");
+    celsius.classList.add("unactive");
+    celsius.addEventListener("click", () => {
+      unitGroup = "metric";
+      getWeatherData().then((data) => displayWeatherData(data));
+    });
+  } else if (unitGroup === "metric") {
+    celsius.classList.remove("unactive");
+    fahrenheit.classList.add("unactive");
+    fahrenheit.addEventListener("click", () => {
+      unitGroup = "us";
+      getWeatherData().then((data) => displayWeatherData(data));
+    });
+  }
+
+  tempContainer.append(temp, fahrenheit, celsius);
 
   const condition = document.createElement("p");
   condition.classList.add("current-condition");
@@ -137,12 +159,21 @@ const displayCurrentWeather = (data) => {
   const windLabel = document.createElement("p");
   windLabel.textContent = "Wind";
   const windSpeed = document.createElement("p");
-  windSpeed.textContent = `${data.wind} mph`;
+  if (unitGroup === "us") {
+    windSpeed.textContent = `${data.wind} mph`;
+  } else if (unitGroup === "metric") {
+    windSpeed.textContent = `${data.wind} km/h`;
+  }
   wind.append(windLabel, windSpeed);
 
   miscInfoList.append(precip, humidity, wind);
 
-  currentWeatherContainer.append(location, temp, condition, miscInfoList);
+  currentWeatherContainer.append(
+    location,
+    tempContainer,
+    condition,
+    miscInfoList,
+  );
   content.append(currentWeatherContainer);
 };
 
@@ -188,7 +219,11 @@ const displayWeeklyWeather = (data) => {
     dayNameAndConditionBox.append(dayName, condition);
 
     const temp = document.createElement("p");
-    temp.textContent = `${Math.round(data.days[i - 1].temp)}°F`;
+    if (unitGroup === "us") {
+      temp.textContent = `${Math.round(data.days[i - 1].temp)}°F`;
+    } else if (unitGroup === "metric") {
+      temp.textContent = `${Math.round(data.days[i - 1].temp)}°C`;
+    }
 
     day.append(icon, dayNameAndConditionBox, temp);
     daysList.append(day);

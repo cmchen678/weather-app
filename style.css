@@ -41,9 +41,17 @@ body {
 }
 
 .current-temp {
-  font-size: 64px;
+  display: flex;
+  align-items: flex-start;
   font-weight: bold;
+  line-height: 1;
+  gap: 5px;
+}
+
+.fahrenheit.unactive,
+.celsius.unactive {
   cursor: pointer;
+  color: gray;
 }
 
 .misc-info-list {
