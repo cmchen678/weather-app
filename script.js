@@ -38,43 +38,36 @@ const getWeatherData = async () => {
       icon: weatherData.currentConditions.icon,
       days: [
         {
-          date: weatherData.days[1].datetime,
           temp: weatherData.days[1].temp,
           condition: weatherData.days[1].conditions,
           icon: weatherData.days[1].icon,
         },
         {
-          date: weatherData.days[2].datetime,
           temp: weatherData.days[2].temp,
           condition: weatherData.days[2].conditions,
           icon: weatherData.days[2].icon,
         },
         {
-          date: weatherData.days[3].datetime,
           temp: weatherData.days[3].temp,
           condition: weatherData.days[3].conditions,
           icon: weatherData.days[3].icon,
         },
         {
-          date: weatherData.days[4].datetime,
           temp: weatherData.days[4].temp,
           condition: weatherData.days[4].conditions,
           icon: weatherData.days[4].icon,
         },
         {
-          date: weatherData.days[5].datetime,
           temp: weatherData.days[5].temp,
           condition: weatherData.days[5].conditions,
           icon: weatherData.days[5].icon,
         },
         {
-          date: weatherData.days[5].datetime,
           temp: weatherData.days[5].temp,
           condition: weatherData.days[5].conditions,
           icon: weatherData.days[5].icon,
         },
         {
-          date: weatherData.days[6].datetime,
           temp: weatherData.days[6].temp,
           condition: weatherData.days[6].conditions,
           icon: weatherData.days[6].icon,
@@ -90,6 +83,24 @@ const getWeatherData = async () => {
 const displayWeatherData = (data) => {
   const content = document.querySelector(".content");
   content.innerHTML = "";
+
+  const container = document.querySelector(".container");
+  if (data.condition === "Clear") {
+    document.body.style.backgroundImage = "url(./images/clear.jpg)";
+    container.style.backgroundImage = "url(./images/clear.jpg)";
+  } else if (data.condition.toLowerCase().includes("rain")) {
+    document.body.style.backgroundImage = "url(./images/rain.jpg)";
+    container.style.backgroundImage = "url(./images/rain.jpg)";
+  } else if (data.condition.toLowerCase().includes("snow")) {
+    document.body.style.backgroundImage = "url(./images/snow.jpg)";
+    container.style.backgroundImage = "url(./images/snow.jpg)";
+  } else if (data.condition.toLowerCase().includes("cloudy")) {
+    document.body.style.backgroundImage = "url(./images/cloudy.jpg)";
+    container.style.backgroundImage = "url(./images/cloudy.jpg)";
+  } else if (data.condition.toLowerCase().includes("overcast")) {
+    document.body.style.backgroundImage = "url(./images/cloudy.jpg)";
+    container.style.backgroundImage = "url(./images/cloudy.jpg)";
+  }
 
   displayCurrentWeather(data);
   displayWeeklyWeather(data);
@@ -136,7 +147,10 @@ const displayCurrentWeather = (data) => {
 
   const location = document.createElement("p");
   location.classList.add("location");
-  location.textContent = data.location;
+  location.textContent = data.location
+    .split(" ")
+    .map((word) => word.at(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   const miscInfoList = document.createElement("ul");
   miscInfoList.classList.add("misc-info-list");
@@ -214,7 +228,7 @@ const displayWeeklyWeather = (data) => {
     const condition = document.createElement("p");
     condition.textContent = data.days[i - 1].condition;
     condition.style.fontSize = "16px";
-    condition.style.color = "gray";
+    condition.style.color = "lightgray";
 
     dayNameAndConditionBox.append(dayName, condition);
 
